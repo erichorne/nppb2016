@@ -8,6 +8,10 @@ python ./sched.py bronco-american | sort -u > bronco-american.csv &
 python ./sched.py pony-american | sort -u > pony-american.csv &
 python ./sched.py pony-national | sort -u > pony-national.csv &
 wait
+find . -size 0 -name \*.csv -print > /var/tmp/sizes
+if [ -s /var/tmp/sizes ]; then 
+  git -f checkout `cat /var/tmp/sizes`
+fi
 git add *-*.csv
 git commit -m "`date '+%Y%m%d@%H%M update'`"
-git push origin master
+git push origin autoupdate
